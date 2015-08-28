@@ -289,6 +289,8 @@ define(function(require) {
       setNavFilename(Path.basename(newFilename));
       showFileState();
     });
+
+    $("#spinner-container").fadeOut();
   }
 
   return {
