@@ -4,11 +4,20 @@ define(function(require) {
 
   // Run the given function `fn` when the key with `keyCode` is pressed down
   function KeyHandler(keyCode, elem, fn) {
+
+    if(typeof keyCode !== "number") {
+      fn = elem;
+      elem = keyCode;
+      keyCode = null;
+    }
+
     function handler(e) {
+      if(!keyCode){
+        return fn(e);
+      }
       if(e.which !== keyCode) {
         return;
       }
-
       e.stopPropagation();
       e.preventDefault();
       fn(e);
@@ -19,10 +28,10 @@ define(function(require) {
       elem = document;
     }
 
-    $(elem).on("keydown", handler);
+    $(elem).on("keyup", handler);
 
     this.stop = function() {
-      $(elem).off("keydown", handler);
+      $(elem).off("keyup", handler);
     };
   }
 
@@ -41,6 +50,14 @@ define(function(require) {
   EnterKeyHandler.prototype = KeyHandler.prototype;
   EnterKeyHandler.prototype.constructor = EnterKeyHandler;
   KeyHandler.Enter = EnterKeyHandler;
+
+  // Helper for any key being pressed to check the title length
+  function AnyKeyHandler(elem, fn) {
+    KeyHandler.call(this, elem, fn);
+  }
+  AnyKeyHandler.prototype = KeyHandler.prototype;
+  AnyKeyHandler.prototype.constructor = AnyKeyHandler;
+  KeyHandler.Any = AnyKeyHandler;
 
   return KeyHandler;
 });

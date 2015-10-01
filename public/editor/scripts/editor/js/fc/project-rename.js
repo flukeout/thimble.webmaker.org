@@ -11,7 +11,6 @@ define(function(require) {
 
     function saveClicked(e) {
         context.saveButton.off("click", saveClicked);
-
         e.stopPropagation();
         e.preventDefault();
         save(context);
@@ -44,6 +43,10 @@ define(function(require) {
         esc: new KeyHandler.ESC(container, function() {
           context.saveButton.off("click", saveClicked);
           editingComplete(context);
+        }),
+        any: new KeyHandler.Any(container, function() {
+          var input = context.titleBar._element;
+          var nameLength = $(input).val().length;
         })
       };
 
